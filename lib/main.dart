@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,11 +27,11 @@ class MyHomePage extends StatelessWidget {
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const Text('Loading...');
             return ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                padding: const EdgeInsets.only(top: 10.0),
-                itemExtent: 55.0,
-                itemBuilder: (context, index) =>
-                    _buildListItem(context, snapshot.data.documents[index]));
+              itemCount: snapshot.data.documents.length,
+              padding: const EdgeInsets.only(top: 10.0),
+              itemBuilder: (context, index) =>
+                  _buildListItem(context, snapshot.data.documents[index]),
+            );
           }),
     );
   }
@@ -43,18 +41,16 @@ class MyHomePage extends StatelessWidget {
       key: ValueKey(document.documentID),
       title: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0x80000000)),
+          border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
         padding: const EdgeInsets.all(10.0),
         child: Row(
-          children: <Widget>[
+          children: [
             Expanded(
               child: Text(document['name']),
             ),
-            Text(
-              document['votes'].toString(),
-            ),
+            Text(document['votes'].toString()),
           ],
         ),
       ),
