@@ -38,16 +38,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return _buildList(context);
+    // TODO: get actual snapshot from Firestore
+    return _buildList(context, dummySnapshot);
   }
 
-  Widget _buildList(BuildContext context) {
+  Widget _buildList(BuildContext context, List<Map> snapshot) {
     return ListView.builder(
-      itemCount: dummySnapshot.length,
+      itemCount: snapshot.length,
       padding: const EdgeInsets.only(top: 20.0),
       itemBuilder: (context, index) => _buildListItem(
             context,
-            dummySnapshot[index],
+            snapshot[index],
           ),
     );
   }
