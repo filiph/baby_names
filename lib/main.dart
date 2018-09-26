@@ -47,12 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.only(top: 20.0),
       itemBuilder: (context, index) => _buildListItem(
             context,
-            Record.fromMap(dummySnapshot[index]),
+            dummySnapshot[index],
           ),
     );
   }
 
-  Widget _buildListItem(BuildContext context, Record record) {
+  Widget _buildListItem(BuildContext context, Map map) {
+    final record = Record.fromMap(map);
+
     return Padding(
       key: ValueKey(record.name),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
