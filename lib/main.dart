@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -13,6 +12,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+final snapshot = [
+  {"name": "Filip", "votes": 15},
+  {"name": "Abraham", "votes": 14},
+  {"name": "Richard", "votes": 11},
+  {"name": "Ike", "votes": 10},
+  {"name": "Justin", "votes": 1},
+];
+
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -22,23 +29,18 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: StreamBuilder(
-          stream: Firestore.instance.collection('baby').snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const Text('Loading...');
-            return ListView.builder(
-              itemCount: snapshot.data.documents.length,
-              padding: const EdgeInsets.only(top: 10.0),
-              itemBuilder: (context, index) =>
-                  _buildListItem(context, snapshot.data.documents[index]),
-            );
-          }),
+      body: ListView.builder(
+        itemCount: snapshot.length,
+        padding: const EdgeInsets.only(top: 10.0),
+        itemBuilder: (context, index) =>
+            _buildListItem(context, snapshot[index]),
+      ),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+  Widget _buildListItem(BuildContext context, Map<String, dynamic> document) {
     return ListTile(
-      key: ValueKey(document.documentID),
+      key: ValueKey(document['name']),
       title: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
@@ -54,12 +56,7 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => Firestore.instance.runTransaction((transaction) async {
-            DocumentSnapshot freshSnap =
-                await transaction.get(document.reference);
-            await transaction
-                .update(freshSnap.reference, {'votes': freshSnap['votes'] + 1});
-          }),
+      onTap: () => print("Tapped on $document"),
     );
   }
 }
