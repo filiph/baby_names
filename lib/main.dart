@@ -1,16 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Baby Names',
-      home: const MyHomePage(title: 'Baby Name Votes'),
-    );
-  }
-}
 
 final snapshot = [
   {"name": "Filip", "votes": 15},
@@ -20,27 +11,32 @@ final snapshot = [
   {"name": "Justin", "votes": 1},
 ];
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Baby Names',
+      home: MyHomePage(),
+    );
+  }
+}
+
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: Text('Baby Name Votes')),
       body: ListView.builder(
         itemCount: snapshot.length,
-        padding: const EdgeInsets.only(top: 10.0),
+        padding: const EdgeInsets.only(top: 20.0),
         itemBuilder: (context, index) =>
-            _buildListItem(context, snapshot[index]),
+            _buildListItem(context, Record.fromMap(snapshot[index])),
       ),
     );
   }
 
-  Widget _buildListItem(BuildContext context, Map<String, dynamic> document) {
+  Widget _buildListItem(BuildContext context, Record record) {
     return ListTile(
-      key: ValueKey(document['name']),
       title: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
@@ -50,13 +46,29 @@ class MyHomePage extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(document['name']),
+              child: Text(record.name),
             ),
-            Text(document['votes'].toString()),
+            Text(record.votes.toString()),
           ],
         ),
       ),
-      onTap: () => print("Tapped on $document"),
+      onTap: () => print("Tapped on $record"),
     );
   }
+}
+
+class Record {
+  final String name;
+  final int votes;
+
+  Record.fromMap(Map<String, dynamic> map)
+      : assert(map.containsKey('name')),
+        assert(map.containsKey('votes')),
+        name = map['name'],
+        votes = map['votes'];
+
+  Record.fromSnapshot(DocumentSnapshot snapshot) : this.fromMap(snapshot.data);
+
+  @override
+  String toString() => "Record<$name:$votes>";
 }
