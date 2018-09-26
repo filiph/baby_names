@@ -32,38 +32,41 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Baby Name Votes')),
-        body: _buildBody(context));
+      appBar: AppBar(title: Text('Baby Name Votes')),
+      body: _buildBody(context),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
+    return _buildList(context);
+  }
+
+  Widget _buildList(BuildContext context) {
     return ListView.builder(
       itemCount: dummySnapshot.length,
       padding: const EdgeInsets.only(top: 20.0),
-      itemBuilder: (context, index) {
-        return _buildListItem(context, Record.fromMap(dummySnapshot[index]));
-      },
+      itemBuilder: (context, index) => _buildListItem(
+            context,
+            Record.fromMap(dummySnapshot[index]),
+          ),
     );
   }
 
   Widget _buildListItem(BuildContext context, Record record) {
-    return ListTile(
-      title: Container(
+    return Padding(
+      key: ValueKey(record.name),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(record.name),
-            ),
-            Text(record.votes.toString()),
-          ],
+        child: ListTile(
+          title: Text(record.name),
+          trailing: Text(record.votes.toString()),
+          onTap: () => print(record),
         ),
       ),
-      onTap: () => print(record),
     );
   }
 }
