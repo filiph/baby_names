@@ -23,12 +23,12 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   @override
-  MyHomePageState createState() {
-    return new MyHomePageState();
+  _MyHomePageState createState() {
+    return new _MyHomePageState();
   }
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
