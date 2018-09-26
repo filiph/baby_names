@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-final snapshot = [
+final dummySnapshot = [
   {"name": "Filip", "votes": 15},
   {"name": "Abraham", "votes": 14},
   {"name": "Richard", "votes": 11},
@@ -21,17 +21,28 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  MyHomePageState createState() {
+    return new MyHomePageState();
+  }
+}
+
+class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Baby Name Votes')),
-      body: ListView.builder(
-        itemCount: snapshot.length,
-        padding: const EdgeInsets.only(top: 20.0),
-        itemBuilder: (context, index) =>
-            _buildListItem(context, Record.fromMap(snapshot[index])),
-      ),
+        appBar: AppBar(title: Text('Baby Name Votes')),
+        body: _buildBody(context));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return ListView.builder(
+      itemCount: dummySnapshot.length,
+      padding: const EdgeInsets.only(top: 20.0),
+      itemBuilder: (context, index) {
+        return _buildListItem(context, Record.fromMap(dummySnapshot[index]));
+      },
     );
   }
 
@@ -52,7 +63,7 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => print("Tapped on $record"),
+      onTap: () => print(record),
     );
   }
 }
@@ -60,14 +71,16 @@ class MyHomePage extends StatelessWidget {
 class Record {
   final String name;
   final int votes;
+  final DocumentReference reference;
 
-  Record.fromMap(Map<String, dynamic> map)
-      : assert(map.containsKey('name')),
-        assert(map.containsKey('votes')),
+  Record.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['name'] != null),
+        assert(map['votes'] != null),
         name = map['name'],
         votes = map['votes'];
 
-  Record.fromSnapshot(DocumentSnapshot snapshot) : this.fromMap(snapshot.data);
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
   String toString() => "Record<$name:$votes>";
