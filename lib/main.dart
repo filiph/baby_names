@@ -43,18 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildList(BuildContext context, List<Map> snapshot) {
-    return ListView.builder(
-      itemCount: snapshot.length,
+    return ListView(
       padding: const EdgeInsets.only(top: 20.0),
-      itemBuilder: (context, index) => _buildListItem(
-            context,
-            snapshot[index],
-          ),
+      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, Map map) {
-    final record = Record.fromMap(map);
+  Widget _buildListItem(BuildContext context, Map data) {
+    final record = Record.fromMap(data);
 
     return Padding(
       key: ValueKey(record.name),
