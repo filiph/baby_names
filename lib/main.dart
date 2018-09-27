@@ -62,11 +62,15 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
+          gradient: LinearGradient(
+              colors: [Colors.purple, Colors.blue], end: Alignment.bottomLeft),
+          borderRadius: BorderRadius.only(topRight: Radius.circular(15.0)),
         ),
         child: ListTile(
-          title: Text(record.name),
+          title: Text(
+            record.name,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+          ),
           trailing: Text(record.votes.toString()),
           onTap: () => record.reference.updateData({'votes': record.votes + 1}),
         ),
