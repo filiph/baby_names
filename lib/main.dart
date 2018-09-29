@@ -72,7 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
           ),
           trailing: Text(record.votes.toString()),
-          onTap: () => record.reference.updateData({'votes': record.votes + 1}),
+          onTap: () => Firestore.instance.runTransaction((transaction) async {
+                final fresh = await transaction.get(record.reference);
+
+                await transaction
+                    .update(record.reference, {'votes': fresh['votes'] + 1});
+              }),
         ),
       ),
     );
